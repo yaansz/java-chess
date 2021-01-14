@@ -30,6 +30,17 @@ public class Board {
 		return this.piece(position.getRow(), position.getColumn());
 	}
 	
+	/**
+	 * 	Function to put a piece on a board position
+	 * 
+	 * @param piece
+	 * @param position
+	 */
+	public void placePiece(Piece piece, Position position) {
+		this.pieces[position.getRow()][position.getColumn()] = piece;
+		piece.position = position;
+	}
+	
 
 	/**
 	 * 
