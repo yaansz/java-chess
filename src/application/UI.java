@@ -80,6 +80,25 @@ public class UI {
 
 		System.out.println("  a b c d e f g h");
 	}
+	
+	/**
+	 * 
+	 * Function to print the Chess Board
+	 * 
+	 * @param pieces
+	 */
+	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print((8 - i) + " ");
+
+			for (int j = 0; j < pieces.length; j++) {
+				printPiece(pieces[i][j], possibleMoves[i][j]);
+			}
+			System.out.println();
+		}
+
+		System.out.println("  a b c d e f g h");
+	}
 
 	/**
 	 * 
@@ -88,9 +107,20 @@ public class UI {
 	 * @param piece
 	 */
 	public static void printPiece(ChessPiece piece) {
-
-		if (piece == null)
-			System.out.print("-");
+		UI.printPiece(piece, false);
+	}
+	
+	/**
+	 * 
+	 * Function to print a chess piece if it exists, or else a it will print a "-".
+	 * 
+	 * @param piece
+	 */
+	public static void printPiece(ChessPiece piece, boolean coloredBackground) {
+		
+		if(coloredBackground) System.out.print(UI.ANSI_BLUE_BACKGROUND);
+		
+		if (piece == null) System.out.print("-" + UI.ANSI_RESET);
 		else {
 
 			String color = piece.getColor() == Color.BLACK ? UI.ANSI_YELLOW : UI.ANSI_WHITE;
