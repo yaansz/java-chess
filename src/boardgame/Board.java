@@ -51,6 +51,28 @@ public class Board {
 	}
 	
 	/**
+	 * 
+	 * Method to remove a piece from the board
+	 * 
+	 * @param position
+	 * @return
+	 */
+	public Piece removePiece(Position position) {
+		if(!this.positionExists(position)) throw new BoardException("Position not on the board.");
+		
+		if(piece(position) == null) return null;
+		
+		// Getting the piece on position and removing the coordinates.
+		Piece aux = piece(position);
+		aux.position = null;
+		
+		// Setting null on board
+		pieces[position.getRow()][position.getColumn()] = null;
+		
+		return aux;
+	}
+	
+	/**
 	 * Method to checking whether a position is valid.
 	 * 
 	 * @param position
