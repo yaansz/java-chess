@@ -69,7 +69,7 @@ public class UI {
 	 * @param pieces
 	 */
 	public static void printBoard(ChessPiece[][] pieces) {
-		UI.printBoard(pieces, new boolean[pieces.length][pieces.length]);
+		UI.printBoard(pieces, null);
 	}
 	
 	/**
@@ -79,11 +79,12 @@ public class UI {
 	 * @param pieces
 	 */
 	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
+		
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print((8 - i) + " ");
 
 			for (int j = 0; j < pieces.length; j++) {
-				printPiece(pieces[i][j], possibleMoves[i][j]);
+				printPiece(pieces[i][j], possibleMoves != null ? possibleMoves[i][j] : false);
 			}
 			System.out.println();
 		}
