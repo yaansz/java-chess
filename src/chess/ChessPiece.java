@@ -20,11 +20,16 @@ public abstract class ChessPiece extends Piece {
 	}
 	
 	
+	
 	/**
 	 * 
 	 * Getters and Setters
 	 * 
 	 */
+	
+	public ChessPosition getChessPosition() {
+		return ChessPosition.fromPosition(position);
+	}
 	
 	public Color getColor() {
 		return color;
