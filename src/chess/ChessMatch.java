@@ -101,8 +101,10 @@ public class ChessMatch {
 	 * @return Possible piece on target position, if there's nothing it just return null
 	 */
 	private Piece makeMove(Position source, Position target) {
-		Piece catcher = board.removePiece(source);
+		ChessPiece catcher = (ChessPiece) board.removePiece(source);
+		catcher.increaseMoveCount();
 		Piece captured = board.removePiece(target);
+		
 		
 		board.placePiece(catcher, target);
 		
@@ -115,7 +117,8 @@ public class ChessMatch {
 	}
 	
 	private void undoMove(Position source, Position target, Piece capturedPiece) {
-		Piece p = board.removePiece(target);
+		ChessPiece p = (ChessPiece) board.removePiece(target);
+		p.decreaseMoveCount();
 		board.placePiece(p, source);
 		
 		if(capturedPiece != null) {
