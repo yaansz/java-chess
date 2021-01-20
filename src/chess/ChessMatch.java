@@ -1,7 +1,9 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import boardgame.Board;
@@ -22,6 +24,7 @@ public class ChessMatch {
 	private boolean check;
 	private boolean checkMate;
 	
+	private ChessPiece promoted;
 	private ChessPiece enPassantVulnerable;
 	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -63,6 +66,34 @@ public class ChessMatch {
 		
 	}
 	
+	public ChessPiece replacePromotedPiece(String type) {
+				
+		final Set<String> possiblePieces = Set.of(
+			    "B","N","R","Q"
+			);
+		
+		if(promoted == null) throw new IllegalStateException("There is no piece to be promoted...");
+		if(!possiblePieces.contains(type)) throw new InvalidParameterException("Invalid type for promotion");
+		
+		Position pos = promoted.getChessPosition().toPosition();
+		Piece p = board.removePiece(pos);
+		
+		piecesOnTheBoard.remove(p);
+		
+		ChessPiece newPiece = newPiece(type, promoted.getColor());
+		board.placePiece(newPiece, pos);
+		piecesOnTheBoard.add(newPiece);
+		
+		return newPiece;
+	}
+	
+	private ChessPiece newPiece(String type, Color color) {
+		if(type.equals("B")) return new Bishop(board, color);
+		else if(type.equals("N")) return new Knight(board, color);
+		else if(type.equals("Q")) return new Queen(board, color);
+		else return new Rook(board, color);
+	}
+	
 	/**
 	 * Change from a ChessPosition source to a ChessPosition destination.
 	 * 
@@ -86,8 +117,19 @@ public class ChessMatch {
 			throw new ChessException("You can't put yourself in check!");
 		}
 		
-		// en passant
 		ChessPiece movedPiece = (ChessPiece) this.board.piece(target);
+		
+		// Checking PROMOTIONS
+		promoted = null;
+		if(movedPiece instanceof Pawn) {
+			if(movedPiece.getColor() == Color.WHITE && target.getRow() == 0 ||
+					movedPiece.getColor() == Color.BLACK && target.getRow() == 7) {
+				promoted = (ChessPiece) board.piece(target);
+				promoted = replacePromotedPiece("Q");
+			}
+		}
+		
+		
 		
 		// did u put your opponent in check? :D
 		check = this.testCheck(this.opponent(this.currentPlayer));
@@ -399,5 +441,9 @@ public class ChessMatch {
 	
 	public ChessPiece getEnPassantVulnerable() {
 		return this.enPassantVulnerable;
+	}
+	
+	public ChessPiece getPromoted() {
+		return this.promoted;
 	}
 }
