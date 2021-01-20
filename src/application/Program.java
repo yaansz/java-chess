@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import chess.ChessException;
 import chess.ChessMatch;
@@ -41,7 +42,16 @@ public class Program {
 				if(capturedPiece != null) captured.add(capturedPiece);
 				if(chessMatch.getPromoted() != null) {
 					System.out.print("Enter piece for promotion (B/N/R/Q): ");
-					String type = scan.nextLine();
+					String type = scan.nextLine().toUpperCase();
+					
+					final Set<String> possiblePieces = Set.of(
+						    "B","N","R","Q"
+					);
+					
+					while(!possiblePieces.contains(type)) {
+						System.out.print("Invalid value! Enter piece for promotion (B/N/R/Q): ");
+						type = scan.nextLine().toUpperCase();
+					}
 					
 					chessMatch.replacePromotedPiece(type);
 				}
